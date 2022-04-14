@@ -25,60 +25,21 @@ function playRound(playerSelection, computerSelection) {
     let parsedComputerSelection = capitalize(computerSelection);
 
     // TODO: Uncouple UI from logic
-    // TODO: Fix duplicated code: result + log + display + increment value
-    // TODO: mixed logic when rounds reach 5
     incrementValue('rounds');
+    let result = '';
     if (playWinsTo(parsedPlayerSelection, parsedComputerSelection)) {
-        // Player wins
-        const result = `You win! ${parsedPlayerSelection} beats ${parsedComputerSelection}`
-        console.log(result);
-        displayResult(result)
+        result = `You win! ${parsedPlayerSelection} beats ${parsedComputerSelection}`
         incrementValue('wins');
-        endGameIfFinished();
-        return "Win";
     }
-    if (playLosesTo(parsedPlayerSelection, parsedComputerSelection)) {
-        // Player lose
-        const result = `You Lose! ${parsedComputerSelection} beats ${parsedPlayerSelection}`
-        console.log(result);
-        displayResult(result);
+    else if (playLosesTo(parsedPlayerSelection, parsedComputerSelection)) {
+        result = `You Lose! ${parsedComputerSelection} beats ${parsedPlayerSelection}`
         incrementValue('loses');
-        endGameIfFinished();
-        return "Lose";
+    } else {
+        result = `It's a tie! You played ${parsedPlayerSelection}`
+        incrementValue('ties');
     }
-    const result = `It's a tie! You played ${parsedPlayerSelection}`
-    console.log(result);
     displayResult(result)
-    incrementValue('ties');
     endGameIfFinished();
-    return "Tie";
-    
-}
-
-function game() {
-    let roundsWon = 0;
-    let roundsLost = 0;
-    for (let i = 0; i < 5; i++) {
-        let playerSelection = prompt("Choose rock, paper or scissors and write it:");
-        let computerSelection = computerPlay();
-        let resultRound = playRound(playerSelection, computerSelection);
-        if (resultRound === "Win") {
-            roundsWon++;
-        }
-        if (resultRound === "Lose") {
-            roundsLost++;
-        }
-    }
-    if (roundsWon > roundsLost) {
-        console.log("Congratulations, you won the game!");
-    }
-    else if (roundsWon < roundsLost) {
-        console.log("Good luck next time!, you lost the game")
-    } 
-    else {
-        console.log("It's a tie!");
-    }
-    console.log(`Wins: ${roundsWon}, Loses: ${roundsLost}`);
 }
 
 // UI
@@ -91,23 +52,18 @@ document.querySelector('.moves').childNodes.forEach(move => {
 });
 
 function endGameIfFinished() {
-    var rounds = parseInt(document.getElementById("rounds").textContent);
-    if (rounds < 5)  return;
-    var roundsWon = parseInt(document.getElementById("wins").textContent);
-    var roundsLost = parseInt(document.getElementById("loses").textContent);
+    let roundsWon = parseInt(document.getElementById("wins").textContent);
+    let roundsLost = parseInt(document.getElementById("loses").textContent);
 
-    if (roundsWon > roundsLost) {
+    if (roundsWon === 5) {
         document.querySelector('html').innerText = "Congratulations, you won the game!";
-        console.log("Congratulations, you won the game!");
+        return;
     }
-    else if (roundsWon < roundsLost) {
+    if (roundsLost === 5) {
         document.querySelector('html').innerText = "Good luck next time!, you lost the game";
-        console.log("Good luck next time!, you lost the game")
+        return;
     } 
-    else {
-        document.querySelector('html').innerText = "It's a tie!";
-        console.log("It's a tie!");
-    }
+
 }
 
 function displayResult(result) {
@@ -115,7 +71,7 @@ function displayResult(result) {
 }
 
 function incrementValue(valueId) {
-    var actual_value = parseInt(document.getElementById(valueId).textContent);
+    let actual_value = parseInt(document.getElementById(valueId).textContent);
     document.getElementById(valueId).textContent = actual_value + 1 ;
 }
 
