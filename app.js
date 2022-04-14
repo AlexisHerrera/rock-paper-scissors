@@ -80,6 +80,8 @@ function popUpModalWithMessage(message) {
     let finalMessage = document.getElementById("final-message");
     finalMessage.innerText = message;
 }
+
+// The oldest trick in the book
 const reload = document.getElementById('reload');
 
 reload.addEventListener('click', _ => {
