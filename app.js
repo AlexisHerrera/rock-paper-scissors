@@ -24,7 +24,7 @@ function playRound(playerSelection, computerSelection) {
     let parsedPlayerSelection = capitalize(playerSelection);
     let parsedComputerSelection = capitalize(computerSelection);
 
-    // TODO: Uncouple UI from logic
+    // Logic is mixed with UI... JS things
     incrementValue('rounds');
     let result = '';
     if (playWinsTo(parsedPlayerSelection, parsedComputerSelection)) {
@@ -42,8 +42,6 @@ function playRound(playerSelection, computerSelection) {
     endGameIfFinished();
 }
 
-// UI
-
 // Links buttons to a move 
 document.querySelector('.moves').childNodes.forEach(move => {
     move.addEventListener('click', function() {
@@ -54,16 +52,15 @@ document.querySelector('.moves').childNodes.forEach(move => {
 function endGameIfFinished() {
     let roundsWon = parseInt(document.getElementById("wins").textContent);
     let roundsLost = parseInt(document.getElementById("loses").textContent);
-
+    if (!(roundsWon === 5 || roundsLost === 5)) return;
+    let message = "";
     if (roundsWon === 5) {
-        document.querySelector('html').innerText = "Congratulations, you won the game!";
-        return;
+        message = "Congratulations, you won the game!";
     }
     if (roundsLost === 5) {
-        document.querySelector('html').innerText = "Good luck next time!, you lost the game";
-        return;
-    } 
-
+        message = "Good luck next time!, you lost the game";
+    }
+    popUpModalWithMessage(message);
 }
 
 function displayResult(result) {
@@ -75,3 +72,16 @@ function incrementValue(valueId) {
     document.getElementById(valueId).textContent = actual_value + 1 ;
 }
 
+/* Modal */
+
+function popUpModalWithMessage(message) {
+    let modal = document.getElementById("myModal");
+    modal.style.display = "block";
+    let finalMessage = document.getElementById("final-message");
+    finalMessage.innerText = message;
+}
+const reload = document.getElementById('reload');
+
+reload.addEventListener('click', _ => {
+    location.reload();
+});
