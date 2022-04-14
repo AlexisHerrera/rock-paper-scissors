@@ -24,7 +24,7 @@ function playRound(playerSelection, computerSelection) {
     let parsedPlayerSelection = capitalize(playerSelection);
     let parsedComputerSelection = capitalize(computerSelection);
 
-    // Logic is mixed with UI... JS things
+    // Here the logic of the game and the UI is mixed (and it's not ok).
     incrementValue('rounds');
     let result = '';
     if (playWinsTo(parsedPlayerSelection, parsedComputerSelection)) {
@@ -81,9 +81,15 @@ function popUpModalWithMessage(message) {
     finalMessage.innerText = message;
 }
 
-// The oldest trick in the book
+/* Reload game */
 const reload = document.getElementById('reload');
 
 reload.addEventListener('click', _ => {
-    location.reload();
+   // Select all counters and set it to 0
+    const counters = document.querySelectorAll(".counter");
+    counters.forEach(counter => counter.textContent = 0);
+    document.getElementById("result").textContent = "Waiting for a move...";
+    let modal = document.getElementById("myModal");
+    modal.style.display = "none";
 });
+
